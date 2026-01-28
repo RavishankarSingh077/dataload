@@ -62,6 +62,35 @@ def add_features(df):
     ).volume_weighted_average_price()
     df["vwap_diff"] = (df["vwap"] - df["Close"]) / df["Close"]
 
+    # OBV (On-Balance Volume)
+    df['obv'] = ta.volume.OnBalanceVolumeIndicator(df['Close'], df['Volume']).on_balance_volume()
+    df['obv_change'] = df['obv'].pct_change()
+    
+    # MFI (Money Flow Index)
+    df['mfi'] = ta.volume.MFIIndicator(df['High'], df['Low'], df['Close'], df['Volume']).money_flow_index()
+    
+    # Stochastic Oscillator
+    stoch = ta.momentum.StochasticOscillator(df['High'], df['Low'], df['Close'])
+    df['stoch_k'] = stoch.stoch()
+    df['stoch_d'] = stoch.stoch_signal()
+    
+    # CCI (Commodity Channel Index)
+    df['cci'] = ta.trend.CCIIndicator(df['High'], df['Low'], df['Close']).cci()
+
+    # CMF (Chaikin Money Flow)
+    df['cmf'] = ta.volume.ChaikinMoneyFlowIndicator(df['High'], df['Low'], df['Close'], df['Volume']).chaikin_money_flow()
+    
+    # Force Index
+    df['force_index'] = ta.volume.ForceIndexIndicator(df['Close'], df['Volume']).force_index()
+    
+    # VPT (Volume Price Trend)
+    df['vpt'] = ta.volume.VolumePriceTrendIndicator(df['Close'], df['Volume']).volume_price_trend()
+
+    # ATR (Volatility)
+    atr = ta.volatility.AverageTrueRange(df["High"], df["Low"], df["Close"])
+    df["atr"] = atr.average_true_range()
+    df["dist_atr"] = (df["Close"] - df["Close"].shift(1)) / df["atr"]
+    
     # Final Cleaning: Remove infinity and NaNs
     import numpy as np
     df.replace([np.inf, -np.inf], np.nan, inplace=True)

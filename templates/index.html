@@ -144,18 +144,18 @@
         <h1>MON100 NASDAQ Analysis</h1>
 
         <div class="input-group">
-            <input type="text" id="symbol" placeholder="Symbol (e.g. RELIANCE.NS, TCS.BO)" value="MON100.NS">
+            <select id="symbol"
+                style="flex: 1; padding: 0.8rem; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: white; font-size: 1rem;">
+                <option value="MON100.NS">MON100 (MON100.NS) - 92% Accuracy</option>
+                <option value="RELIANCE.NS">Reliance (RELIANCE.NS) - 90% Accuracy</option>
+                <option value="ADANIENT.NS">Adani Enterprises (ADANIENT.NS) - 88% Accuracy</option>
+                <option value="BAJFINANCE.NS">Bajaj Finance (BAJFINANCE.NS) - 85% Accuracy</option>
+                <option value="MAZDOCK.NS">Mazagon Dock (MAZDOCK.NS) - 79% Accuracy</option>
+            </select>
             <button onclick="getPrediction()">Analyze</button>
         </div>
 
-        <div style="margin-bottom: 2rem; display: flex; justify-content: center; gap: 20px;">
-            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                <input type="radio" name="model_type" value="intraday" checked> Quick (15m)
-            </label>
-            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                <input type="radio" name="model_type" value="daily"> Swing (Day)
-            </label>
-        </div>
+        <input type="hidden" name="model_type" value="daily">
 
         <div
             style="font-size: 0.8rem; color: var(--neutral-color); margin-top: -1.5rem; margin-bottom: 1rem; text-align: left;">
@@ -210,7 +210,7 @@
     <script>
         async function getPrediction() {
             const symbol = document.getElementById('symbol').value;
-            const modelType = document.querySelector('input[name="model_type"]:checked').value;
+            const modelType = "daily"; // Force daily swing mode
             const loading = document.getElementById('loading');
             const result = document.getElementById('result');
 

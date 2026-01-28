@@ -11,12 +11,12 @@ def train_model(symbol="AAPL", mode="intraday"):
         df = load_data(symbol, interval="5m", period="60d")
         shift_val = -3 # 15 mins
         threshold = 0.002 # 0.2%
-        model_name = "model_intraday.pkl"
+        model_name = f"model_{symbol}_intraday.pkl"
     else: # daily
-        df = load_data(symbol, interval="1d", period="5y")
+        df = load_data(symbol, interval="1d", period="5y") # Back to 5y for patterns
         shift_val = -1 # Next day
-        threshold = 0.015 # 1.5% for strong daily moves
-        model_name = "model_daily.pkl"
+        threshold = 0.015 # 1.5% for robust swing moves
+        model_name = f"model_{symbol}_daily.pkl"
     
     # 2. Add features
     df = add_features(df)
@@ -28,13 +28,13 @@ def train_model(symbol="AAPL", mode="intraday"):
         if pd.isna(x):
             return 0
         if x > threshold:
-            return 1   # UP
-        elif x < -threshold:
-            return -1  # DOWN
+            return 1   # UP (The only thing we want to catch)
         else:
-            return 0   # NO_TRADE
+            return 0   # NOT UP (Down or Sideways)
 
     df["label"] = df["future_return"].apply(label)
+    print(f"Class distribution for {mode}:")
+    print(df["label"].value_counts())
     df.dropna(inplace=True)
 
     # 4. Define features and target
@@ -42,7 +42,9 @@ def train_model(symbol="AAPL", mode="intraday"):
         "return", "volume_change", "rsi", "ema_9", "ema_20", "ema_50", 
         "ema_cross_9_20", "ema_cross_20_50", "dist_ema_9", "dist_ema_50", 
         "macd", "adx", "dist_ichimoku_a", "dist_ichimoku_base",
-        "bb_high_diff", "bb_low_diff", "vwap_diff"
+        "bb_high_diff", "bb_low_diff", "vwap_diff", "atr", "dist_atr",
+        "obv_change", "mfi", "stoch_k", "stoch_d", "cci",
+        "cmf", "force_index", "vpt"
     ]
     for i in range(1, 4):
         feature_cols.append(f"return_lag_{i}")
@@ -60,11 +62,14 @@ def train_model(symbol="AAPL", mode="intraday"):
     if mode == "daily":
         from sklearn.ensemble import RandomForestClassifier
         model = RandomForestClassifier(
-            n_estimators=500,
-            max_depth=15,
-            class_weight='balanced',
+            n_estimators=2000,
+            max_depth=30,
+            class_weight='balanced_subsample',
             random_state=42,
-            n_jobs=-1
+            n_jobs=-1,
+            min_samples_split=2,
+            min_samples_leaf=1,
+            ccp_alpha=0.0001 # Minimal pruning to keep high accuracy
         )
     else: # intraday
         model = lgb.LGBMClassifier(
@@ -85,12 +90,20 @@ def train_model(symbol="AAPL", mode="intraday"):
     
     print(f"Model saved to {model_name}")
     
-    # 8. Quick eval
+    # 8. Detailed Evaluation
+    from sklearn.metrics import classification_report
+    y_pred = model.predict(X_test)
     accuracy = model.score(X_test, y_test)
-    print(f"Test Accuracy ({mode}): {accuracy:.4f}")
+    print(f"\n--- {mode.upper()} EVALUATION ---")
+    print(f"Test Accuracy: {accuracy:.4f}")
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred))
 
 if __name__ == "__main__":
-    print("--- Training Intraday Model ---")
-    train_model("MON100.NS", mode="intraday")
-    print("\n--- Training Daily Model (RF) ---")
-    train_model("MON100.NS", mode="daily")
+    target_stocks = ["RELIANCE.NS", "MON100.NS"]
+    
+    for symbol in target_stocks:
+        print(f"\nTraining Elite Model for: {symbol}")
+        train_model(symbol, mode="daily")
+    
+    print("\nTraining for RELIANCE and MON100 complete.")

@@ -17,7 +17,9 @@ CONFIDENCE_THRESHOLD = 0.6
 def get_prediction(symbol, model_type="intraday"):
     # Select model and parameters
     if model_type == "daily":
-        model_path = MODEL_DAILY
+        model_path = f"model_{symbol}_daily.pkl"
+        if not os.path.exists(model_path):
+             model_path = MODEL_DAILY # Fallback
         interval = "1d"
         period = "1y"
         expected_move_pct = 1.5 # 1.5% for daily
@@ -43,7 +45,9 @@ def get_prediction(symbol, model_type="intraday"):
             "return", "volume_change", "rsi", "ema_9", "ema_20", "ema_50", 
             "ema_cross_9_20", "ema_cross_20_50", "dist_ema_9", "dist_ema_50", 
             "macd", "adx", "dist_ichimoku_a", "dist_ichimoku_base",
-            "bb_high_diff", "bb_low_diff", "vwap_diff"
+            "bb_high_diff", "bb_low_diff", "vwap_diff", "atr", "dist_atr",
+            "obv_change", "mfi", "stoch_k", "stoch_d", "cci",
+            "cmf", "force_index", "vpt"
         ]
         for i in range(1, 4):
             feature_cols.append(f"return_lag_{i}")
@@ -53,19 +57,15 @@ def get_prediction(symbol, model_type="intraday"):
 
         # Predict
         probs = model.predict_proba(X)[0]
-        classes = model.classes_
+        classes = list(model.classes_)
         prob_map = dict(zip(classes, probs))
         
         up_prob = float(prob_map.get(1, 0))
-        down_prob = float(prob_map.get(-1, 0))
-        no_trade_prob = float(prob_map.get(0, 0))
+        not_up_prob = float(prob_map.get(0, 0))
 
         if up_prob >= CONFIDENCE_THRESHOLD:
             decision = f"BUY ({model_type.upper()})"
             signal_class = "buy"
-        elif down_prob >= CONFIDENCE_THRESHOLD:
-            decision = f"SELL ({model_type.upper()})"
-            signal_class = "sell"
         else:
             decision = "NO TRADE"
             signal_class = "neutral"
@@ -81,8 +81,8 @@ def get_prediction(symbol, model_type="intraday"):
         return {
             "symbol": symbol,
             "up_prob": round(up_prob * 100, 2),
-            "down_prob": round(down_prob * 100, 2),
-            "no_trade_prob": round(no_trade_prob * 100, 2),
+            "down_prob": 0, # Hidden in binary
+            "no_trade_prob": round(not_up_prob * 100, 2),
             "decision": decision,
             "signal_class": signal_class,
             "last_price": round(last_price, 2),
