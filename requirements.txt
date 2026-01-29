@@ -7,3 +7,7 @@ ta
 flask
 flask-cors
 gunicorn
+vaderSentiment
+gymnasium
+mistralai
+python-dotenv

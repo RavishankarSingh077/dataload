@@ -130,11 +130,241 @@
             margin-top: 5px;
         }
 
+        /* Chat Widget Styles */
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        /* Mobile Responsive Tweaks */
+        @media (max-width: 480px) {
+            .chat-window {
+                width: 95% !important;
+                height: 80vh !important;
+                bottom: 90px !important;
+                right: 2.5% !important;
+                max-width: none !important;
+                position: fixed;
+            }
+
+            .chat-bubble {
+                width: 55px;
+                height: 55px;
+                font-size: 0.7rem;
+                padding: 0;
+            }
+        }
+
+        .chat-bubble {
+            width: 64px;
+            height: 64px;
+            padding: 0;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s;
+            text-align: center;
+        }
+
+        .chat-bubble:hover {
+            transform: translateY(-2px);
+        }
+
+        .chat-hint {
+            background: white;
+            color: black;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+            white-space: nowrap;
+        }
+
+        /* Arrow pointing right */
+        .chat-hint::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%) rotate(45deg);
+            width: 12px;
+            height: 12px;
+            background: white;
+        }
+
+        .chat-window {
+            display: none;
+            width: 350px;
+            max-width: 90vw;
+            height: 450px;
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg {
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 85%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .msg.user {
+            background: var(--accent-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .msg.bot {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+            align-self: flex-start;
+            border: 1px solid #30363d;
+            word-wrap: break-word;
+            /* Ensures long text wraps */
+            white-space: pre-wrap;
+            /* Preserves spaces and line breaks */
+            max-width: 85%;
+            /* Prevents overflow */
+        }
+
+        .chat-input-area {
+            padding: 10px;
+            border-top: 1px solid #30363d;
+            display: flex;
+            gap: 5px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 8px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+        }
+
         .footer {
             margin-top: 2rem;
             font-size: 0.75rem;
             color: var(--neutral-color);
             line-height: 1.4;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #30363d;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            max-height: 80vh;
+            overflow-y: auto;
+            text-align: left;
+            color: var(--text-color);
+        }
+
+        .close-btn {
+            color: var(--neutral-color);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: white;
+        }
+
+        .rules-btn {
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .rules-btn:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .guide-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+
+        .guide-table th,
+        .guide-table td {
+            border: 1px solid #30363d;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .guide-table th {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         @media (max-width: 480px) {
@@ -162,7 +392,11 @@
 
 <body>
     <div class="container">
-        <h1>MON100 NASDAQ Analysis</h1>
+        <h1>STOCK MARKET ANALYSIS</h1>
+
+        <button class="rules-btn" onclick="toggleModal(true)">
+            <span>💡</span> Trading Rules (Hindi Guide)
+        </button>
 
         <div class="input-group">
             <select id="symbol"
@@ -204,6 +438,18 @@
                 Expected move: <span id="res-pct"></span>% in <span id="res-time-hint"></span>
             </div>
 
+            <div id="v2-container"
+                style="margin-bottom: 20px; padding: 15px; background: rgba(88, 166, 255, 0.05); border-radius: 8px; border: 1px dashed var(--accent-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>News Sentiment:</strong>
+                    <span id="res-sentiment" style="font-weight: 700;">Neutral</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                    <strong>Elite Agent Strategy:</strong>
+                    <span id="res-agent" style="font-weight: 700; color: var(--accent-color);">WAIT</span>
+                </div>
+            </div>
+
             <div class="prob-container">
                 <div>UP Probability: <span id="up-val"></span>%</div>
                 <div class="prob-bar">
@@ -223,12 +469,182 @@
         </div>
 
         <div class="footer">
-            ⚠️ Disclaimer: Probability-based experimental research model. Not financial advice. Always use manual
-            stop-loss.
+            <p>⚠️ Disclaimer: This app is created by Ravi for personal use. Copying or making it public is a punishable
+                offense.</p>
+            <div style="text-align: right; margin-top: 5px; font-weight: bold;">Created by: Ravi</div>
+        </div>
+    </div>
+
+    <!-- Modal for Trading Guide -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="toggleModal(false)">&times;</span>
+            <h2 style="color: var(--accent-color); border-bottom: 1px solid #30363d; padding-bottom: 10px;">📌 स्निपर
+                ट्रेडिंग गाइड (Sniper Trading Guide)</h2>
+
+            <p style="font-size: 0.9rem; color: var(--neutral-color);">ये गाइड आपको डैशबोर्ड के हर हिस्से को समझने और
+                सही ट्रेड लेने में मदद करेगी।</p>
+
+            <h3 style="font-size: 1.1rem; color: white;">1. डैशबोर्ड की हर 'Key' का मतलब:</h3>
+            <ul style="font-size: 0.9rem; line-height: 1.6; padding-left: 20px;">
+                <li><strong>Symbol (प्रतीक)</strong>: स्टॉक का नाम (जैसे MON100.NS)।</li>
+                <li><strong>Price (कीमत)</strong>: स्टॉक का अभी का ताज़ा भाव।</li>
+                <li><strong>Target (लक्ष्य - हरा)</strong>: यहाँ पहुँचने पर अपना मुनाफा (Profit) बुक करें।</li>
+                <li><strong>Risk/SL (जोखिम - लाल)</strong>: इसके नीचे जाने पर बाहर निकलें (Stop Loss)।</li>
+                <li><strong>बड़ा बॉक्स (Decision)</strong>: मुख्य सिग्नल है। BUY मतलब खरीदें, NO TRADE मतलब इंतज़ार।</li>
+                <li><strong>UP Probability</strong>: ऊपर जाने की ताकत (60% से ऊपर मतलब बहुत मज़बूत)।</li>
+                <li><strong>DOWN Probability</strong>: नीचे जाने का खतरा (50% से ऊपर मतलब बाहर रहें)।</li>
+                <li><strong>NO TRADE Probability</strong>: 50% से ऊपर मतलब बाज़ार साइडवेज है, ट्रेड न लें।</li>
+                <li><strong>News Sentiment</strong>: ख़बरें अच्छी हैं (+%) या बुरी (-%)।</li>
+                <li><strong>Elite Agent Strategy</strong>: AI रोबोट का फैसला (BUY/WAIT)।</li>
+            </ul>
+
+            <h3 style="font-size: 1.1rem; color: white;">2. ट्रेडिंग के पक्के नियम (कब क्या करें?):</h3>
+            <table class="guide-table">
+                <tr>
+                    <th>इंडिकेटर</th>
+                    <th>वैल्यू</th>
+                    <th>एक्शन (Action)</th>
+                </tr>
+                <tr>
+                    <td>News Sentiment</td>
+                    <td>Positive (> 5%)</td>
+                    <td style="color: var(--buy-color);">Bullish: सुरक्षित महसूस होकर ट्रेड देखें।</td>
+                </tr>
+                <tr>
+                    <td>News Sentiment</td>
+                    <td>Negative (< -5%)</td>
+                    <td style="color: var(--sell-color);">Bearish: खतरा है, ट्रेड बिल्कुल न लें।</td>
+                </tr>
+                <tr>
+                    <td>UP Probability</td>
+                    <td>60% से ज़्यादा</td>
+                    <td><strong>Mighty Buy</strong>: मज़बूत टेक्निकल सिग्नल।</td>
+                </tr>
+                <tr>
+                    <td>Elite Agent</td>
+                    <td>BUY</td>
+                    <td><strong>AI Confirmation</strong>: रोबोट को भरोसा है।</td>
+                </tr>
+                <tr>
+                    <td>DOWN Probability</td>
+                    <td>50% से ज़्यादा</td>
+                    <td style="color: var(--sell-color);"><strong>Urgent Exit</strong>: तुरंत बाहर निकल जाएँ।</td>
+                </tr>
+            </table>
+
+            <h3 style="font-size: 1.1rem; color: white;">3. खरीद (Entry) और बिक्री (Exit):</h3>
+            <ul style="font-size: 0.9rem; line-height: 1.6; padding-left: 20px;">
+                <li><strong>मज़बूत खरीद (Strong Buy)</strong>: जब Agent "BUY" बोले, Sentiment Positive हो और UP
+                    Probability 60% के ऊपर हो।</li>
+                <li><strong>हल्की खरीद (Light Buy)</strong>: अगर Agent "BUY" बोले लेकिन Probability 40-50% हो, तो केवल
+                    25% पैसा ही लगाएं।</li>
+                <li><strong>बिक्री</strong>: Target आने पर, SL टूटने पर, या DOWN Prob 50% पार होने पर।</li>
+            </ul>
+
+            <h3 style="font-size: 1.1rem; color: white;">4. कब चेक करें?</h3>
+            <p style="font-size: 0.9rem;">सुबह **9:30 AM** (दिशा के लिए) और दोपहर **2:45 PM** (कल के लिए)।</p>
+
+            <button style="width: 100%; margin-top: 10px;" onclick="toggleModal(false)">समझ गया (Close)</button>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+        <div id="chatWindow" class="chat-window">
+            <div class="chat-header">
+                <strong>Steffy 👩‍💼</strong>
+                <span style="cursor: pointer;" onclick="toggleChat(false)">&times;</span>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+                <div class="msg bot">Hi Ravi! Main aa gayi hoon. Batao aaj kya plan hai?</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Kuch puchiye..."
+                    onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" style="padding: 5px 10px;">Ask <i
+                        class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div class="chat-hint">Ask me anything</div>
+            <div class="chat-bubble" onclick="toggleChat(true)">Chatbot</div>
         </div>
     </div>
 
     <script>
+        let currentContext = {};
+
+        function toggleChat(show) {
+            const win = document.getElementById('chatWindow');
+            win.style.display = show ? 'flex' : 'none';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Add user message
+            addMessage(text, 'user');
+            input.value = '';
+
+            // Loading state
+            const loadingMsg = addMessage('Thinking...', 'bot');
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, context: currentContext })
+                });
+                const data = await response.json();
+
+                // Typewriter Effect
+                loadingMsg.innerText = ""; // Clear loading dots
+                let i = 0;
+                const speed = 20; // Type speed in ms
+                const txt = data.response;
+
+                function typeWriter() {
+                    if (i < txt.length) {
+                        loadingMsg.innerText += txt.charAt(i);
+                        i++;
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        setTimeout(typeWriter, speed);
+                    }
+                }
+                typeWriter();
+
+            } catch (e) {
+                console.error("Chat Error:", e);
+                loadingMsg.innerText = "Error: " + e.message + ". Check server logs.";
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addMessage(text, side) {
+            const div = document.createElement('div');
+            div.className = `msg ${side}`;
+            div.innerText = text;
+            document.getElementById('chatMessages').appendChild(div);
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+            return div;
+        }
+
+        function toggleModal(show) {
+            document.getElementById('guideModal').style.display = show ? 'block' : 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            const modal = document.getElementById('guideModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
         async function getPrediction() {
             const symbol = document.getElementById('symbol').value;
             const modelType = "daily"; // Force daily swing mode
@@ -263,6 +679,16 @@
                     document.getElementById('decision').innerText = data.decision;
                     document.getElementById('decision').className = 'decision-header ' + data.signal_class;
 
+                    document.getElementById('res-sentiment').innerText = data.sentiment_mood + " (" + (data.sentiment_score * 100).toFixed(1) + "%)";
+                    document.getElementById('res-agent').innerText = data.agent_decision;
+
+                    // Style sentiment
+                    const sElem = document.getElementById('res-sentiment');
+                    if (data.sentiment_score > 0.05) sElem.style.color = 'var(--buy-color)';
+                    else if (data.sentiment_score < -0.05) sElem.style.color = 'var(--sell-color)';
+                    else sElem.style.color = 'var(--neutral-color)';
+
+                    // Probability Bars
                     document.getElementById('up-val').innerText = data.up_prob;
                     document.getElementById('up-fill').style.width = data.up_prob + '%';
 
@@ -273,6 +699,12 @@
                     document.getElementById('no-fill').style.width = data.no_trade_prob + '%';
 
                     result.style.display = 'block';
+
+                    // Chatbot Context
+                    currentContext = data;
+                    if (data.decision === "BUY") {
+                        addMessage(`Ravi, mujhe ${data.symbol} me BUY signal dikh raha hai! Check karoge?`, 'bot');
+                    }
                 }
             } catch (e) {
                 alert('Connection Error');
